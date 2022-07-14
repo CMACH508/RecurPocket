@@ -6,7 +6,7 @@ In this paper, we propose a recurrent Lmser network, called RecurPocket, to impr
 
 An overview of our network framework:  
 
-<img src=".\overview.png" style="zoom:30%;" />
+<img src=".\overview.png" width="60%" />
 
 
 
