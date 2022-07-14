@@ -12,7 +12,7 @@ An overview of our network framework:
 
 We compare RecurPocket with the state-of-the-art methods on public benchmark datasets.  From following table we can see that RecurPocket demonstrates significant improvement in binding site detection work. Its Top-$n$ accuracy on HOLO4K is about $7\%$ higher than DeepPocket. Note that Kalasanty and DeepPocket are the recent works, and compared with them, the number of parameters is the same because of Lmser dualities, but RecurPocket achieves better results. 
 
-<img src=".\compare_tab.png" style="zoom:50%;" />
+<img src=".\compare_tab.png" width="80%" />
 
 
 From the following figure we can see that Kalasanty has incomplete predictions, or the predictions exceed the cavity interface. DeepPocket predicts fewer false positives, but still has incompleteness. The results of RecurPocket are closer to the cavity. It continuously enriches information through each iteration, and the mask mechanism filters irrelevant information so that useful and accurate information is transferred from the decoder to the next encoder, and the prediction is more complete and accurate.
