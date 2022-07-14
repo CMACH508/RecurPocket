@@ -75,8 +75,8 @@ If use your own dataset,
 
 ## Pre-trained Models
 
-You can download the RecurPocket model from this [link](), and place the `ckpt` under `RecurPocket/`.  
-You can download the test set COACH420 from this [link](), and place the `dataset` under `RecurPocket/`.  
+You can download the RecurPocket model from this [link](https://jbox.sjtu.edu.cn/l/w1wkmK) (code：fpaa), and place the `ckpt` under `RecurPocket/`.  
+You can download the test set COACH420 from this [link](https://jbox.sjtu.edu.cn/l/91QseT) (code：kqhx), and place the `dataset` under `RecurPocket/`.  
 The directory structure should be like:
 ```
 ├── RecurPocket
