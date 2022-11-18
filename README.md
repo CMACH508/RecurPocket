@@ -8,7 +8,7 @@ RecurPocket: Recurrent Lmser Network with Gating Mechanism for Protein Binding S
 
 It is an essential step to locate the binding sites or pockets of drug molecules on protein structure in drug design. This is challenging because the 3D protein structures are usually in complicated, irregular shape and the pockets are relatively small. Existing deep learning methods for this task are U-Net models, and they have forward skip connections to efficiently transfer features of different levels of 3D structure from encoder to decoder for improving pocket prediction.    However, there is still room to improve prediction accuracy.    In this paper, we propose RecurPocket, a recurrent Lmser (Least mean square error reconstruction) network for pocket detection. A gated recurrent refinement is devised in RecurPocket to enhance the representation learning on the 3D protein structures. This is fulfilled by feedback connections in RecurPocket network from decoder to encoder, recurrently and progressively improving the feature embedding for accurate prediction. Moreover, a 3D gate mechanism filters out irrelevant information through the feedback links that interfere with detection, making the prediction more precise and clear. Experiments show that RecurPocket improves by $3\%-9\%$ on top-$n$ prediction compared with previous state-of-the-art on five benchmark data sets.
 
-<img src="figs/overview-220821.png" style="zoom:50%;" />
+<img src="figs/overview-220821.png" style="zoom:40%;" />
 
 **Fig**：(a) An unfolded-view of our RecurPocket ($\tau$=2). *Pre* block is to convert 3D protein structure to multi-channel 3D grids. *Mid* block consists of 3D-conv and relu that repeat twice and is calculated forward. The input of VM in the same column is the same, which is the output of *Post* block. For simplicity and clarity, we omit the connections. (b) Details of encoder block ($E_i$) and decoder block ($D_i$). (c) Details of voxel-level masking. (d) Details of *Pre* and *Post* blocks.
 
@@ -91,6 +91,7 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    ```
 
    <img src="figs/table2.png" style="zoom:50%;" />
+   
 3. **Train Models**
    If you want to train Kalasanty by yourself, the command is as follows:
 
@@ -169,11 +170,11 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_deeppocket/RecurPocket2_ite3+mask/seg0-0.89919-42.pth.tar --DATA_ROOT dataset_RecurPocket --is_dca 1 -n 0 --ite 3 --is_mask 1
    ```
 
-   <img src="./figs/table4.png" style="zoom:50%;" />
+   <img src="figs/table4.png" style="zoom:50%;" />
 
    Please note that, the results of Fpocket, Deepsite, and P2Rank under COACH420, HOLO4k, and SC6K are from DeepPocket paper. We download `coach420_best_test_IOU_44.pth.tar` checkpoint to test DeepPocket on COACH420, HOLO4K, SC6K PDBbind.  We download  `seg0_best_test_IOU_91.pth.tar` checkpoint to test DeepPocket on ApoHolo.  The results of `coach420_best_test_IOU_44.pth.tar` checkpoint on ApoHolo are 55.83 and 64.56 for Top-n and Top-(n+2). The Rank result of DeepPocket and RecurPocket on apoholo are re-rankd according to the volume of predicted pocket.
 
-   <img src="./figs/table1.png" style="zoom:50%;" />
+   <img src="figs/table1.png" style="zoom:50%;" />
 3. **Train Model**
 
    If you want to train DeepPocket or download pre-trianed DeepPocket models, you can refer to GitHub from authors (https://github.com/devalab/DeepPocket).
