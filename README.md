@@ -6,7 +6,7 @@ RecurPocket: Recurrent Lmser Network with Gating Mechanism for Protein Binding S
 
 ## Introduction
 
-It is an essential step to locate the binding sites or pockets of drug molecules on protein structure in drug design. This is challenging because the 3D protein structures are usually in complicated, irregular shape and the pockets are relatively small. Existing deep learning methods for this task are U-Net models, and they have forward skip connections to efficiently transfer features of different levels of 3D structure from encoder to decoder for improving pocket prediction.    However, there is still room to improve prediction accuracy.    In this paper, we propose RecurPocket, a recurrent Lmser (Least mean square error reconstruction) network for pocket detection. A gated recurrent refinement is devised in RecurPocket to enhance the representation learning on the 3D protein structures. This is fulfilled by feedback connections in RecurPocket network from decoder to encoder, recurrently and progressively improving the feature embedding for accurate prediction. Moreover, a 3D gate mechanism filters out irrelevant information through the feedback links that interfere with detection, making the prediction more precise and clear. Experiments show that RecurPocket improves by 3%-9% on top- $n$  prediction compared with previous state-of-the-art on five benchmark data sets.
+It is an essential step to locate the binding sites or pockets of drug molecules on protein structure in drug design. This is challenging because the 3D protein structures are usually in complicated, irregular shape and the pockets are relatively small. Existing deep learning methods for this task are U-Net models, and they have forward skip connections to efficiently transfer features of different levels of 3D structure from encoder to decoder for improving pocket prediction.    However, there is still room to improve prediction accuracy.    In this paper, we propose RecurPocket, a recurrent Lmser (Least mean square error reconstruction) network for pocket detection. A gated recurrent refinement is devised in RecurPocket to enhance the representation learning on the 3D protein structures. This is fulfilled by feedback connections in RecurPocket network from decoder to encoder, recurrently and progressively improving the feature embedding for accurate prediction. Moreover, a 3D gate mechanism filters out irrelevant information through the feedback links that interfere with detection, making the prediction more precise and clear. Experiments show that RecurPocket improves by  3%-9% on top- $n$  prediction compared with previous state-of-the-art on five benchmark data sets.
 
 <img src="figs/overview-220821.png" width="65%" />
 
@@ -115,12 +115,12 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    python -u main.py --DATA_ROOT dataset_RecurPocket/ --save_dir checkpoint --gpu 0,1 --is_mask 0 --iterations 3
    ```
 
-   Please note that:
-   --DATA_ROOT: the path to dataset root
-   --save_dir: the path to save the model
-   --gpu: gpu id
-   --is_mask=0: without mask
-   --ite: iteration
+   Please note that:  
+   --DATA_ROOT: the path to dataset root  
+   --save_dir: the path to save the model  
+   --gpu: gpu id  
+   --is_mask=0: without mask  
+   --ite: iteration  
 
    Attention: $\tau$ is `iteration-1`
 
