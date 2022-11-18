@@ -92,6 +92,8 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
 
    <img src="figs/table2.png" style="zoom:50%;" />
    
+<img src="figs/overview-220821.png" style="zoom:40%;" /> 
+   
 3. **Train Models**
    If you want to train Kalasanty by yourself, the command is as follows:
 
