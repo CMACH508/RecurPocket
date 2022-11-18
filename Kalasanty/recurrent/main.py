@@ -1,232 +1,164 @@
-# _date_:2021/8/29 16:10
-import numpy as np
+# _date_:2021/8/27 13:25
+import os
+import sys
 import torch
-from torch.nn.parallel.data_parallel import DataParallel
+import numpy as np
 from torch.utils.data import DataLoader
-from skimage.segmentation import clear_border
-from skimage.measure import label
-from skimage.morphology import closing
-from scipy.spatial.distance import cdist
-import os, sys
+import datetime
+from torch.nn import DataParallel
+from torch import nn as nn
 import argparse
 from os.path import join
+import os, sys
 
+# print()
+torch.backends.cudnn.bencmark = True
+
+def setup_seed(seed):
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+
+
+setup_seed(101)
 BASE_DIR = os.path.abspath('../../')
 print(BASE_DIR)
 sys.path += [BASE_DIR]
 from Kalasanty import dataset
+from Kalasanty.recurrent.criterion import Ovl, Dice, DiceLoss
 
-def get_pockets_segmentation(density, threshold=0.5, min_size=50, scale=0.5, max_n = None):
-    """Predict pockets using specified threshold on the probability density.
-    Filter out pockets smaller than min_size A^3
-    """
-    if len(density) != 1:
-        raise ValueError('segmentation of more than one pocket is not'
-                         ' supported')
-    voxel_size = (1 / scale) ** 3  # scale? # 8
-    # get a general shape, without distinguishing output channels
-
-    bw = closing((density[0] > threshold).any(axis=-1))
-
-    cleared = clear_border(bw)
-
-    # label regions
-    label_image, num_labels = label(cleared, return_num=True)
-
-    # for i in range(1, num_labels + 1):
-    #     pocket_idx = (label_image == i)
-    #     pocket_size = pocket_idx.sum() * voxel_size
-    #     if pocket_size < min_size:
-    #         label_image[np.where(pocket_idx)] = 0
-    # return label_image
-
-    if max_n is None:
-        for i in range(1, num_labels + 1):
-            pocket_idx = (label_image == i)
-            pocket_size = pocket_idx.sum() * voxel_size
-            if pocket_size < min_size:
-                label_image[np.where(pocket_idx)] = 0
-        return label_image
-    else:
-        size_list = []
-        for i in range(1, num_labels + 1):
-            pocket_idx = (label_image == i)
-            pocket_size = pocket_idx.sum() * voxel_size
-            # print(i, pocket_size, min_size)
-            if pocket_size >= min_size:
-                size_list.append(pocket_size)
-        indexs = np.argsort(-np.array(size_list))  # da -- xiao
-        indexs = indexs[:max_n] + 1
-        label_list = indexs
-        new_label_image = np.zeros_like(label_image)
-        # print(label_list)
-        for ii, lab in enumerate(label_list):
-            pocket_idx = (label_image == lab)
-            new_label_image[np.where(pocket_idx)] = ii+1
-        return new_label_image
-
-
-def test_model(model, device, data_loader, scale, Threshold_dist):
-    model.eval()
-    succ = 0
-    total = 0
-    dvo = 0
-    DVO_list = []
-    with torch.no_grad():
-        for ite, (protien_x, label, centerid, real_num) in enumerate(data_loader, start=1):
-            print('Processing {}/{}'.format(ite, len(data_loader)))
-            protien_x, label = protien_x.to(device), label.cpu().numpy()  # (bs, 18, 36, 36, 36) # (bs, 36, 36, 36)
-            predy_density = model(protien_x)  # (bs, 1, 36, 36, 36)
-
-            predy_density = predy_density.data.cpu().numpy()
-
-            for i, density in enumerate(predy_density):  # (1, 36, 36, 36)
-                total += real_num[i]
-                density = np.expand_dims(density, 4)  # (1, 36, 36, 36, 1)
-                truth_labels = label[i]
-                num_cavity = int(truth_labels.max())
-                # print('num_cavity={}'.format(num_cavity))
-                if num_cavity == 0:
-                    # print('--------========xxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-                    continue
-
-                if is_dca:
-                    max_n = real_num[i] + top_n
-                else:
-                    max_n = None
-                predict_labels = get_pockets_segmentation(density, scale=scale, max_n=max_n)
-
-
-                for target_num in range(1, num_cavity + 1):
-                    truth_indices = np.argwhere(truth_labels == target_num).astype('float32')
-                    label_center = truth_indices.mean(axis=0)
-                    min_dist = 1e6
-                    match_label = 0
-                    for pocket_label in range(1, predict_labels.max() + 1):
-                        indices = np.argwhere(predict_labels == pocket_label).astype('float32')
-                        if len(indices) == 0:
-                            continue
-                        center = indices.mean(axis=0)
-                        dist = np.linalg.norm(label_center - center)
-
-                        if dist < min_dist:
-                            min_dist = dist
-                            match_label = pocket_label
-
-                    if min_dist <= Threshold_dist:
-                        succ += 1
-                        indices = np.argwhere(predict_labels == match_label).astype('float32')
-                        if test_set == 'pdbbind':
-                            protien_array = protien_x[i].data.cpu().numpy()  # (18,36,36,36)
-                            protien_array = protien_array.transpose((1, 2, 3, 0))  # (36,36,36,18)
-                            protein_coord = []
-                            for k1 in range(36):
-                                for k2 in range(36):
-                                    for k3 in range(36):
-                                        # print(protien_array[k1, k2, k3].shape)  #(18)
-                                        # if not np.all(protien_array[k1, k2, k3]):
-                                        if np.any(protien_array[k1, k2, k3]):
-                                            protein_coord.append(np.asarray([k1, k2, k3]))
-                            protein_coord = np.asarray(protein_coord)
-                            ligand_dist = cdist(indices, protein_coord)
-                            distance = 3
-                            binding_indices = np.where(np.any(ligand_dist <= distance, axis=0))
-                            indices = protein_coord[binding_indices]
-                            ligand_dist = cdist(truth_indices, protein_coord)
-                            distance = 1
-                            binding_indices = np.where(np.any(ligand_dist <= distance, axis=0))
-                            truth_indices = protein_coord[binding_indices]
-
-                        indices_set = set([tuple(x) for x in indices])
-                        truth_indices_set = set([tuple(x) for x in truth_indices])
-
-                        dvo = len(indices_set & truth_indices_set) / len(indices_set | truth_indices_set)
-                        DVO_list.append(dvo)
-
-            if is_dca:
-                print('now: succ={} total={} succ/total={}'.format(succ, total, succ / total))
-            else:
-                print('now: succ={} total={} succ/total={} dvo={} ({})'.format(succ, total, succ / total, np.sum(DVO_list) / total, np.mean(DVO_list)))
-        if is_dca:
-            res = '| succ={} | total={} | succ/total={}'.format(succ, total, succ / total)
-        else:
-            res = '| succ={} | total={} | succ/total={} | dvo={} ({})'.format(succ, total, succ / total, np.sum(DVO_list) / total, np.mean(DVO_list))
-        return res
-
-
-parser = argparse.ArgumentParser(description='Test Kalasanty')
-parser.add_argument('--model_path', type=str, help="path of Kalasanty checkpoint")
-parser.add_argument('--DATA_ROOT', type=str, help="the path of DATA_ROOT")
-parser.add_argument('--test_set', type=str, help="the name of test data set")
-parser.add_argument('--is_dca', type=int, help="calculate DCA or (DCC and DVO)")
-parser.add_argument('-n', '--top_n', type=int, default=0, help="for dca test, top-n if n=0, top-(n+2) if n=2")
-parser.add_argument('--gpu', type=str, default='0', help="gpu device")
-parser.add_argument('--ite', type=int, default=3, help="iteration")
-parser.add_argument('--is_mask', type=int, default=0, help="is_mask")
+parser = argparse.ArgumentParser()
+parser.add_argument('--batch_size', type=int, default=70, help='')
+parser.add_argument('--test_batch_size', type=int, default=30, help='')
+parser.add_argument('--base_lr', type=float, default=1e-5, help='')
+parser.add_argument('--lr_adjust', nargs='+', type=int, default=[20000], help='')
+parser.add_argument('--print_freq', type=int, default=300, help='')
+# parser.add_argument('--gpu', type=str, default='0,1', help='')
+parser.add_argument('--gpu', type=str, default='2,3', help='')
+parser.add_argument('--save_dir', type=str, default=None, help='')
+parser.add_argument('--max_epoch', type=int, default=1500, help='')
+parser.add_argument('--iterations', type=int, default=3, help='')
+parser.add_argument('--is_mask', type=int, default=0, help='')
+parser.add_argument('--DATA_ROOT', type=str, default=None, help='')
 args = parser.parse_args()
+print(args)
 
-# ICME RecurPocket-kalasanty
-dataset.DATA_ROOT = args.DATA_ROOT
-model_path = args.model_path
-is_dca = args.is_dca
-top_n = args.top_n
-test_set = args.test_set
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
+if args.save_dir is None:
+    args.save_dir = 'checkpoint'
+
+args.save_dir = os.path.abspath(args.save_dir)
+if not os.path.exists(args.save_dir):
+    os.mkdir(args.save_dir)
 
 
-# test_set = 'scpdb'
-# test_set = 'pdbbind'
-# test_set = 'apo_holo'
-# test_set = 'coach420'
-# test_set = 'holo4k'
-# os.environ['CUDA_VISIBLE_DEVICES'] = '2'
-# os.environ['CUDA_VISIBLE_DEVICES'] = '0,2'
-# os.environ['CUDA_VISIBLE_DEVICES'] = '2,3'
-# is_dca = 1
-# is_dca = 0
+def get_time():
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+def validate(model, device, val_loader, dice_loss):
+    model.eval()
+    loss_list = []
+    for ite, (protien, label) in enumerate(val_loader, start=1):
+        protien, label = protien.to(device), label.to(device)
+        with torch.no_grad():
+            predy = model(protien)
+        tot_loss = dice_loss(y_pred=predy, y_true=label)
+        tot_loss = tot_loss.item()
+        loss_list.append(tot_loss)
+    return np.mean(loss_list)
+
+
+def main():
+    device = torch.device('cuda')
+    if args.is_mask:
+        from Kalasanty.recurrent.network_mask import Net
+        print('------- mask -------')
+    else:
+        from Kalasanty.recurrent.network import Net
+        print('--------- no mask ---------')
+
+    print('args.iterations=', args.iterations)
+    print('args.is_mask=', args.is_mask)
+    model = Net(iterations=args.iterations).to(device)
+    model = DataParallel(model)
+
+    bce = nn.BCELoss().to(device)
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.base_lr, weight_decay=1e-3)  # l2_lambda
+
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.lr_adjust, gamma=0.1)
+
+    dataset.DATA_ROOT = args.DATA_ROOT
+
+    train_dataset = dataset.TrainscPDB(subset='train')
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False, drop_last=False, num_workers=10,
+                              pin_memory=False)
+
+    val_dataset = dataset.TrainscPDB(subset='validation')
+    val_loader = DataLoader(val_dataset, batch_size=args.test_batch_size, shuffle=False, drop_last=True, num_workers=10,
+                            pin_memory=False)
+    min_val_loss = 100
+
+    resume = False
+    if resume:
+        checkpoint = torch.load('path of pretrained model')
+        model.load_state_dict(checkpoint)
+        print('-------- load model successfully --------')
+
+    dice_loss = DiceLoss().to(device)
+    dice = Dice().to(device)
+    ovl = Ovl().to(device)
+    epo = 0
+    for epo in range(0, args.max_epoch):
+        scheduler.step()
+        model.train()
+        a_time = datetime.datetime.now()
+
+        for ite, (protien, label) in enumerate(train_loader, start=0):
+            # print('protien:', protien.shape)
+            # print('label:', label.shape)
+            protien, label = protien.to(device), label.to(device)
+
+            predy = model(protien)
+            # print(predy.shape)  # [10, 1, 36, 36, 36]
+
+            tot_loss = dice_loss(y_pred=predy, y_true=label)
+            optimizer.zero_grad()
+            tot_loss.backward()
+            tot_loss = tot_loss.item()
+            optimizer.step()
+
+            if ite % 100 == 0:
+                metric_dice = dice(y_pred=predy, y_true=label).item()
+                metric_ovl = ovl(y_pred=predy, y_true=label).item()
+                metric_bce = bce(predy, label).item()
+
+                print('epoch : %2d|%2d, iter:%3d|%3d,loss:%.4f,dice:%.3f,ovl:%.3f,bce:%.3f,lr={%.6f}' %
+                      (epo, args.max_epoch, ite, len(train_loader), tot_loss, metric_dice, metric_ovl, metric_bce,
+                       optimizer.param_groups[0]['lr']))
+        b_time = datetime.datetime.now()
+
+        if epo % 20 == 0:
+            if not os.path.exists(args.save_dir):
+                os.mkdir(args.save_dir)
+            torch.save(model.state_dict(), os.path.join(args.save_dir, '{}.pth'.format(epo)))
+
+        val_loss = validate(model, device, val_loader, dice_loss)
+        print('val_loss={}'.format(val_loss))
+        c_time = datetime.datetime.now()
+        if min_val_loss > val_loss:
+            min_val_loss = val_loss
+
+            torch.save(model.state_dict(), os.path.join(args.save_dir, 'best_model.pth'))
+            print('------- sota found, epo={} loss={}'.format(epo, val_loss))
+
+        print(get_time(), 'train:{}s val:{}s'.format((b_time - a_time).seconds, (c_time - b_time).seconds))
+    torch.save(model.state_dict(), os.path.join(args.save_dir, '{}.pth'.format(epo)))
+
 
 if __name__ == '__main__':
-    device = torch.device('cuda')
-    _dataset = None
-
-    mask = False
-    one_channel = False
-
-    if test_set == 'scpdb':
-        _dataset = dataset.TestscPDB(one_channel=False, mask=mask)
-    elif test_set == 'pdbbind':
-        _dataset = dataset.TestPDBbind(one_channel=False, mask=mask, is_dca=is_dca)
-    elif test_set == 'apo_holo':
-        _dataset = dataset.TestApoHolo(one_channel=False, mask=mask, is_dca=is_dca)
-    elif test_set == 'coach420' or test_set == 'holo4k':
-        _dataset = dataset.Test_coach420_holo4k(set=test_set, is_dca=is_dca)
-
-    data_loader = DataLoader(_dataset, batch_size=40, shuffle=False, drop_last=False, num_workers=6)
-
-    if args.is_mask:
-        from recurrent.network_mask import Net
-    else:
-        from recurrent.network import Net
-    model = Net(iterations=args.ite).to(device)
-    model = DataParallel(model)
-    print('Restoring model from path: ' + model_path)
-    checkpoint = torch.load(model_path)
-    model.load_state_dict(checkpoint)
-
-    res = test_model(model, device, data_loader, scale=0.5, Threshold_dist=2)
-    print('|', test_set, res)
-    print(model_path, '\n')
-    print('is_dca=', is_dca)
-
-    # paths.sort()
-    # for model_path in paths:
-    #     checkpoint = torch.load(model_path)
-    #     print('Restoring model from path: ' + model_path)
-    #     model.load_state_dict(checkpoint)
-    #
-    #     res = test_model(model, device, data_loader, scale=0.5, Threshold_dist=2)
-    #     print('|', test_set, res)
-    #     print(model_path, '\n')
-    #
-
-
+    print('start time:', get_time())
+    main()
+    print('end time:', get_time())
