@@ -49,8 +49,8 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_kalasanty/baseline_model/1050_best_model.pth --DATA_ROOT /cmach-data/lipeiying/program/_Drug_/dataset --is_dca 1 -n 0
    ```
 
-   If you want to test RecurPocket ($\tau=1,2,3,4$) based on kalasanty settings, please run the following commands.
-   To test RecurPocket($\tau=1$)  without mask (*is_mask=0*) on coach420 for DCC and DVO test, run
+   If you want to test RecurPocket ( $\tau=1,2,3,4$ ) based on kalasanty settings, please run the following commands.
+   To test RecurPocket( $\tau=1$ )  without mask (*is_mask=0*) on coach420 for DCC and DVO test, run
 
    ```
    cd Kalasanty/recurrent
@@ -69,21 +69,21 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
 
    Attention: $\tau$ is `iteration-1`
 
-   To test RecurPocket($\tau=1$) on coach420 for DCA test, run
+   To test RecurPocket( $\tau=1$ ) on coach420 for DCA test, run
 
    ```
    cd Kalasanty/recurrent
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_kalasanty/kalasanty-ite2/i2-recurrent-1300.pth --DATA_ROOT /cmach-data/lipeiying/program/_Drug_/dataset --is_dca 1 -n 0 --is_mask 0 --ite 2
    ```
 
-   To test RecurPocket($\tau=2$) without mask on coach420 for DCC and DVO test, run
+   To test RecurPocket( $\tau=2$ ) without mask on coach420 for DCC and DVO test, run
 
    ```
    cd Kalasanty/recurrent
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_kalasanty/kalasanty-ite3/best_model.pth --DATA_ROOT /cmach-data/lipeiying/program/_Drug_/dataset --is_dca 0 -n 0 --is_mask 0 --ite 3
    ```
 
-   To test RecurPocket($\tau=2$) with mask on coach420 for DCC and DVO test, run
+   To test RecurPocket( $\tau=2$ ) with mask on coach420 for DCC and DVO test, run
 
    ```
    cd Kalasanty/recurrent
@@ -108,7 +108,7 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    --ite: iteration
    --batch_size: batch size
 
-   If you want to train RecurPocket($\tau=1,2,3,4$) based on Kalasanty settings by yourself, such as RecurPocket($\tau=2$) without mask (is_mask=0), the command is as follows:
+   If you want to train RecurPocket( $\tau=1,2,3,4$ ) based on Kalasanty settings by yourself, such as RecurPocket( $\tau=2$ ) without mask (is_mask=0), the command is as follows:
 
    ```
    cd Kalasanty/recurrent
@@ -157,14 +157,14 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    python -u test_camera.py --gpu 0 --test_set apoholo --model_path ckpt_deeppocket/seg0_best_test_IOU_91.pth.tar --DATA_ROOT dataset_RecurPocket --is_dca 1 -n 2 --ite 1
    ```
 
-   If you want to test RecurPocket($\tau=1$) based on DeepPocket settings on coach420 under DCC and DVO metrics, run
+   If you want to test RecurPocket( $\tau=1$ ) based on DeepPocket settings on coach420 under DCC and DVO metrics, run
 
    ```
    cd DeepPocket
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_deeppocket/RecurPocket1_ite2/seg0_best_test_IOU_55.pth-1.tar --DATA_ROOT dataset_RecurPocket --is_dca 0 -n 0 --ite 2
    ```
 
-   If you want to test RecurPocket($\tau=2$) with mask based on DeepPocket settings on coach420 under DCA metrics, run
+   If you want to test RecurPocket( $\tau=2$ ) with mask based on DeepPocket settings on coach420 under DCA metrics, run
 
    ```
    cd DeepPocket
@@ -183,7 +183,7 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
 
    If you want to train DeepPocket or download pre-trianed DeepPocket models, you can refer to GitHub from authors (https://github.com/devalab/DeepPocket).
 
-   If you want to train RecurPocket($\tau=1,2,3,4$) w/wo mask, for example, RecurPocket($\tau=1$) without mask, run
+   If you want to train RecurPocket( $\tau=1,2,3,4$ ) w/wo mask, for example, RecurPocket( $\tau=1$ ) without mask, run
 
    ```
    cd DeepPocket
