@@ -172,11 +172,10 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    ```
   &emsp;&emsp;<img src="figs/table4.png" width="40%" />  
    
-   
-   
-   Please note that, the results of Fpocket, Deepsite, and P2Rank under COACH420, HOLO4k, and SC6K are from DeepPocket paper. We download `coach420_best_test_IOU_44.pth.tar` checkpoint to test DeepPocket on COACH420, HOLO4K, SC6K PDBbind.  We download  `seg0_best_test_IOU_91.pth.tar` checkpoint to test DeepPocket on ApoHolo.  The results of `coach420_best_test_IOU_44.pth.tar` checkpoint on ApoHolo are 55.83 and 64.56 for Top-n and Top-(n+2). The Rank result of DeepPocket and RecurPocket on apoholo are re-rankd according to the volume of predicted pocket.  
+  &emsp;&emsp;<img src="figs/table1.png" width="70%" />  
+  
+  Please note that, the results of Fpocket, Deepsite, and P2Rank under COACH420, HOLO4k, and SC6K are from DeepPocket paper. We download `coach420_best_test_IOU_44.pth.tar` checkpoint to test DeepPocket on COACH420, HOLO4K, SC6K PDBbind.  We download  `seg0_best_test_IOU_91.pth.tar` checkpoint to test DeepPocket on ApoHolo.  The results of `coach420_best_test_IOU_44.pth.tar` checkpoint on ApoHolo are 55.83 and 64.56 for Top-n and Top-(n+2). The Rank result of DeepPocket and RecurPocket on apoholo are re-rankd according to the volume of predicted pocket.  
 
-  &emsp;&emsp;<img src="figs/table1.png" width="70%" />
    
 3. **Train Model**
 
