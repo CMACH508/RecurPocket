@@ -90,7 +90,7 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_kalasanty/kalasanty-ite3+mask/960.pth --DATA_ROOT /cmach-data/lipeiying/program/_Drug_/dataset --is_dca 0 -n 0 --is_mask 1 --ite 3
    ```
 
-  <img src="figs/table2.png" width="40%" />
+  &emsp;&emsp;<img src="figs/table2.png" width="45%" />
    
    
 3. **Train Models**
@@ -173,7 +173,7 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
 
   &emsp;&emsp;<img src="figs/table4.png" width="40%" />
 
-   Please note that, the results of Fpocket, Deepsite, and P2Rank under COACH420, HOLO4k, and SC6K are from DeepPocket paper. We download `coach420_best_test_IOU_44.pth.tar` checkpoint to test DeepPocket on COACH420, HOLO4K, SC6K PDBbind.  We download  `seg0_best_test_IOU_91.pth.tar` checkpoint to test DeepPocket on ApoHolo.  The results of `coach420_best_test_IOU_44.pth.tar` checkpoint on ApoHolo are 55.83 and 64.56 for Top-n and Top-(n+2). The Rank result of DeepPocket and RecurPocket on apoholo are re-rankd according to the volume of predicted pocket.
+   &emsp;&emsp;Please note that, the results of Fpocket, Deepsite, and P2Rank under COACH420, HOLO4k, and SC6K are from DeepPocket paper. We download `coach420_best_test_IOU_44.pth.tar` checkpoint to test DeepPocket on COACH420, HOLO4K, SC6K PDBbind.  We download  `seg0_best_test_IOU_91.pth.tar` checkpoint to test DeepPocket on ApoHolo.  The results of `coach420_best_test_IOU_44.pth.tar` checkpoint on ApoHolo are 55.83 and 64.56 for Top-n and Top-(n+2). The Rank result of DeepPocket and RecurPocket on apoholo are re-rankd according to the volume of predicted pocket.
 
   &emsp;&emsp;<img src="figs/table1.png" width="70%" />
    
