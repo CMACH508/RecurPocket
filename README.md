@@ -8,7 +8,7 @@ RecurPocket: Recurrent Lmser Network with Gating Mechanism for Protein Binding S
 
 It is an essential step to locate the binding sites or pockets of drug molecules on protein structure in drug design. This is challenging because the 3D protein structures are usually in complicated, irregular shape and the pockets are relatively small. Existing deep learning methods for this task are U-Net models, and they have forward skip connections to efficiently transfer features of different levels of 3D structure from encoder to decoder for improving pocket prediction.    However, there is still room to improve prediction accuracy.    In this paper, we propose RecurPocket, a recurrent Lmser (Least mean square error reconstruction) network for pocket detection. A gated recurrent refinement is devised in RecurPocket to enhance the representation learning on the 3D protein structures. This is fulfilled by feedback connections in RecurPocket network from decoder to encoder, recurrently and progressively improving the feature embedding for accurate prediction. Moreover, a 3D gate mechanism filters out irrelevant information through the feedback links that interfere with detection, making the prediction more precise and clear. Experiments show that RecurPocket improves by $3\%-9\%$ on top-$n$ prediction compared with previous state-of-the-art on five benchmark data sets.
 
-<img src="figs/overview-220821.png" style="zoom:20%;" />
+<img src="figs/overview-220821.png" width="30%" />
 
 **Fig**：(a) An unfolded-view of our RecurPocket ($\tau$=2). *Pre* block is to convert 3D protein structure to multi-channel 3D grids. *Mid* block consists of 3D-conv and relu that repeat twice and is calculated forward. The input of VM in the same column is the same, which is the output of *Post* block. For simplicity and clarity, we omit the connections. (b) Details of encoder block ($E_i$) and decoder block ($D_i$). (c) Details of voxel-level masking. (d) Details of *Pre* and *Post* blocks.
 
@@ -90,9 +90,9 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_kalasanty/kalasanty-ite3+mask/960.pth --DATA_ROOT /cmach-data/lipeiying/program/_Drug_/dataset --is_dca 0 -n 0 --is_mask 1 --ite 3
    ```
 
- <img src="figs/table2.png" style="zoom:25%;" />
+  <img src="figs/table2.png" width="20%" />
    
-<img src="figs/overview-220821.png" style="zoom:10%;" /> 
+<img src="figs/overview-220821.png" width="20%" /> 
    
 3. **Train Models**
    If you want to train Kalasanty by yourself, the command is as follows:
