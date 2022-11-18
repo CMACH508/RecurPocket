@@ -18,7 +18,7 @@ It is an essential step to locate the binding sites or pockets of drug molecules
 
 **Test data:** You can download test data sets  according to the links, `COACH420` (https://github.com/rdk/p2rank-datasets/tree/master/coach420), `PDBbind` (http://www.pdbbind.org.cn/download.php), `Chen (ApoHolo)` (http://biomine.cs.vcu.edu/datasets/BindingSitesPredictors/main.html), `HOLO4k` (https://github.com/rdk/p2rank-datasets/tree/master/holo4k), `SC6K` (https://github.com/devalab/DeepPocket).
 
-You can also download our pre-processed train and test data from Baidu Cloud Disk `RecurPocket_release/dataset_RecurPocket` from Baidu Cloud Disk (https://pan.baidu.com/s/1xgQYgtFsQXI2EofCxh60Bw code：4ua7)
+You can also download our pre-processed train and test data `RecurPocket_release/dataset_RecurPocket` from Baidu Cloud Disk (https://pan.baidu.com/s/1xgQYgtFsQXI2EofCxh60Bw code：4ua7)
 
 ## Kalasanty settings
 
