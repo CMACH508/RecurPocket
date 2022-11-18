@@ -10,7 +10,7 @@ It is an essential step to locate the binding sites or pockets of drug molecules
 
 <img src="figs/overview-220821.png" width="65%" />
 
-**Fig**：(a) An unfolded-view of our RecurPocket ($\tau$=2). *Pre* block is to convert 3D protein structure to multi-channel 3D grids. *Mid* block consists of 3D-conv and relu that repeat twice and is calculated forward. The input of VM in the same column is the same, which is the output of *Post* block. For simplicity and clarity, we omit the connections. (b) Details of encoder block ($E_i$) and decoder block ($D_i$). (c) Details of voxel-level masking. (d) Details of *Pre* and *Post* blocks.
+**Fig**：(a) An unfolded-view of our RecurPocket ( $\tau$ =2). *Pre* block is to convert 3D protein structure to multi-channel 3D grids. *Mid* block consists of 3D-conv and relu that repeat twice and is calculated forward. The input of VM in the same column is the same, which is the output of *Post* block. For simplicity and clarity, we omit the connections. (b) Details of encoder block ($E_i$) and decoder block ($D_i$). (c) Details of voxel-level masking. (d) Details of *Pre* and *Post* blocks.
 
 ## Dataset
 
