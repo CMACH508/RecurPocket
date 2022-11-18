@@ -204,9 +204,9 @@ if __name__ == '__main__':
     data_loader = DataLoader(_dataset, batch_size=40, shuffle=False, drop_last=False, num_workers=6)
 
     if args.is_mask:
-        from recurrent.network_mask import Net
+        from Kalasanty.recurrent.network_mask import Net
     else:
-        from recurrent.network import Net
+        from Kalasanty.recurrent.network import Net
     model = Net(iterations=args.ite).to(device)
     model = DataParallel(model)
     print('Restoring model from path: ' + model_path)
