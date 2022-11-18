@@ -11,9 +11,10 @@ import os, sys
 import argparse
 from os.path import join
 
-BASE_DIR = os.path.abspath('../')
-sys.path += [BASE_DIR, join(BASE_DIR, 'recurrent')]
-import dataset
+BASE_DIR = os.path.abspath('../../')
+print(BASE_DIR)
+sys.path += [BASE_DIR]
+from Kalasanty import dataset
 
 def get_pockets_segmentation(density, threshold=0.5, min_size=50, scale=0.5, max_n = None):
     """Predict pockets using specified threshold on the probability density.
