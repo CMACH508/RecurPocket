@@ -58,14 +58,14 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    ```
 
    Please note that:
-   --gpu: gpu id
-   --DATA_ROOT: the path to dataset root
-   --model_path: the path of test model
-   --is_dca=1, -n=0: calculate DCA top-n
-   --is_dca=1, -n=2: calculate DCA top-n+2
-   --is_dca=0: calculate DCC and DVO.
-   --is_mask=0: without mask
-   --ite: iteration
+   --gpu: gpu id  
+   --DATA_ROOT: the path to dataset root  
+   --model_path: the path of test model  
+   --is_dca=1, -n=0: calculate DCA top-n  
+   --is_dca=1, -n=2: calculate DCA top-n+2  
+   --is_dca=0: calculate DCC and DVO  
+   --is_mask=0: without mask  
+   --ite: iteration  
 
    Attention: $\tau$ is `iteration-1`
 
