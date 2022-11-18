@@ -90,7 +90,7 @@ You can also download our pre-processed train and test data from Baidu Cloud Dis
    python -u test_camera.py --gpu 0 --test_set coach420 --model_path ckpt_kalasanty/kalasanty-ite3+mask/960.pth --DATA_ROOT /cmach-data/lipeiying/program/_Drug_/dataset --is_dca 0 -n 0 --is_mask 1 --ite 3
    ```
 
-   <img src="figs/table2.png" width="50%" />
+  <img src="figs/table2.png" width="70%" />
    
    
 3. **Train Models**
