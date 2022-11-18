@@ -20,7 +20,7 @@ It is an essential step to locate the binding sites or pockets of drug molecules
 
 You can also download our pre-processed train and test data `RecurPocket_release/dataset_RecurPocket` from Baidu Cloud Disk (https://pan.baidu.com/s/1xgQYgtFsQXI2EofCxh60Bw code：4ua7)
 
-## Kalasanty settings
+## Experiment based on Kalasanty settings
 
 1. **Pre-trained models**
 
@@ -126,7 +126,7 @@ You can also download our pre-processed train and test data `RecurPocket_release
 
    Attention: $\tau$ is `iteration-1`
 
-## DeepPocket settings
+## Experiment based on DeepPocket settings
 
 1. **Pre-trained models**
 
