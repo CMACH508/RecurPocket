@@ -196,3 +196,21 @@ You can also download our pre-processed train and test data `RecurPocket_release
 
 > http://gitlab.com/cheminfIBB/kalasanty  
 > https://github.com/devalab/DeepPocket
+
+
+## Reference
+
+Please cite our work if you find our code/paper is useful to your work.
+
+```
+@article{Li,  
+title={RecurPocket: Recurrent Lmser Network with Gating Mechanism for Protein Binding Site Detection},  
+author={Peiying Li, Boheng Cao, Shikui Tu, Lei Xu},  
+journal={Briefings in bioinformatics},  
+volume={},  
+number={},  
+year={2022},  
+month={},  
+pages={}  
+}
+```
